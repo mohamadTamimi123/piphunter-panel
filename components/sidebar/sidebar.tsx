@@ -25,7 +25,12 @@ export const SidebarWrapper = () => {
   const { collapsed, setCollapsed } = useSidebarContext();
 
   return (
-    <aside className="h-screen z-[20] sticky top-0">
+    <aside className="h-screen z-[20] sticky top-0
+
+
+
+ border-l border-divider
+">
       {collapsed ? (
         <div className={Sidebar.Overlay()} onClick={setCollapsed} />
       ) : null}
@@ -40,7 +45,7 @@ export const SidebarWrapper = () => {
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
             <SidebarItem
-              title="Home"
+              title="خانه"
               icon={<HomeIcon />}
               isActive={pathname === "/"}
               href="/"
@@ -48,13 +53,19 @@ export const SidebarWrapper = () => {
             <SidebarMenu title="Main Menu">
               <SidebarItem
                 isActive={pathname === "/accounts"}
-                title="Accounts"
+                title="تنظیمات حساب"
+                icon={<AccountsIcon />}
+                href="accounts"
+              />
+              <SidebarItem
+                isActive={pathname === "/accounts"}
+                title="زیرمجموعه گیری"
                 icon={<AccountsIcon />}
                 href="accounts"
               />
               <SidebarItem
                 isActive={pathname === "/payments"}
-                title="Payments"
+                title="تیکت ها"
                 icon={<PaymentsIcon />}
               />
               <CollapseItems
@@ -62,48 +73,9 @@ export const SidebarWrapper = () => {
                 items={["Banks Accounts", "Credit Cards", "Loans"]}
                 title="Balances"
               />
-              <SidebarItem
-                isActive={pathname === "/customers"}
-                title="Customers"
-                icon={<CustomersIcon />}
-              />
-              <SidebarItem
-                isActive={pathname === "/products"}
-                title="Products"
-                icon={<ProductsIcon />}
-              />
-              <SidebarItem
-                isActive={pathname === "/reports"}
-                title="Reports"
-                icon={<ReportsIcon />}
-              />
+
             </SidebarMenu>
 
-            <SidebarMenu title="General">
-              <SidebarItem
-                isActive={pathname === "/developers"}
-                title="Developers"
-                icon={<DevIcon />}
-              />
-              <SidebarItem
-                isActive={pathname === "/view"}
-                title="View Test Data"
-                icon={<ViewIcon />}
-              />
-              <SidebarItem
-                isActive={pathname === "/settings"}
-                title="Settings"
-                icon={<SettingsIcon />}
-              />
-            </SidebarMenu>
-
-            <SidebarMenu title="Updates">
-              <SidebarItem
-                isActive={pathname === "/changelog"}
-                title="Changelog"
-                icon={<ChangeLogIcon />}
-              />
-            </SidebarMenu>
           </div>
           <div className={Sidebar.Footer()}>
             <Tooltip content={"Settings"} color="primary">

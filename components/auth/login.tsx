@@ -7,7 +7,9 @@ import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from 'react';
+import Loader from '@/components/spiner/Spiner';
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const router = useRouter();
@@ -16,21 +18,53 @@ export const Login = () => {
     email: "admin@acme.com",
     password: "admin",
   };
+  const [showLoader, setShowLoader] = useState();
 
   const handleLogin = useCallback(
     async (values: LoginFormType) => {
       // `values` contains email & password. You can use provider to connect user
 
-      await createAuthCookie();
-      router.replace("/");
+      // console.log(values)
+      setShowLoader(true)
+
+      const data = {
+        username : values.email ,
+        password : values.password
+      }
+
+      fetch(`${process.env.API_PATH}/api/v1/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => {
+          setShowLoader(false)
+          if (res.status !== 200) {
+            toast.error("error");
+          } else {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          if (data.success){
+            createAuthCookie(data.data);
+            // router.replace("/");
+          }
+          console.log(data);
+        });
+
+
+
     },
     [router]
   );
 
   return (
     <>
-      <div className='text-center text-[25px] font-bold mb-6'>Login</div>
-
+      <div className='text-center text-[25px] font-bold mb-6'>ورود</div>
+      {showLoader && < Loader />}
       <Formik
         initialValues={initialValues}
         validationSchema={LoginSchema}
@@ -62,7 +96,7 @@ export const Login = () => {
               onPress={() => handleSubmit()}
               variant='flat'
               color='primary'>
-              Login
+              ورود
             </Button>
           </>
         )}

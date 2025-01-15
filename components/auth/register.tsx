@@ -7,10 +7,14 @@ import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from 'react';
+import { toast } from "react-toastify";
+import Spiner from '@/components/spiner/Spiner';
+import Loader from '@/components/spiner/Spiner';
 
 export const Register = () => {
   const router = useRouter();
+  const [showLoader, setShowLoader] = useState(false);
 
   const initialValues: RegisterFormType = {
     name: "Acme",
@@ -18,21 +22,51 @@ export const Register = () => {
     password: "admin",
     confirmPassword: "admin",
   };
-
+  const notify = () => toast("Wow so easy!");
   const handleRegister = useCallback(
     async (values: RegisterFormType) => {
-      // `values` contains name, email & password. You can use provider to register user
 
-      await createAuthCookie();
-      router.replace("/");
+      console.log(values)
+      setShowLoader(true)
+
+      const data = {
+        username : values.email ,
+        password : values.password
+      }
+
+      fetch(`${process.env.API_PATH}/api/v1/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => {
+          setShowLoader(false)
+          if (res.status !== 200) {
+            toast.error("error");
+          } else {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          if (data.success){
+            createAuthCookie(data.data);
+            router.replace("/");
+          }
+          console.log(data);
+        });
+
+
+
     },
     [router]
   );
 
   return (
     <>
-      <div className='text-center text-[25px] font-bold mb-6'>Register</div>
-
+      <div className='text-center text-[25px] font-bold mb-6'>ثبت نام</div>
+      {showLoader && < Loader />}
       <Formik
         initialValues={initialValues}
         validationSchema={RegisterSchema}
@@ -40,17 +74,10 @@ export const Register = () => {
         {({ values, errors, touched, handleChange, handleSubmit }) => (
           <>
             <div className='flex flex-col w-1/2 gap-4 mb-4'>
+
               <Input
                 variant='bordered'
-                label='Name'
-                value={values.name}
-                isInvalid={!!errors.name && !!touched.name}
-                errorMessage={errors.name}
-                onChange={handleChange("name")}
-              />
-              <Input
-                variant='bordered'
-                label='Email'
+                label='ایمیل'
                 type='email'
                 value={values.email}
                 isInvalid={!!errors.email && !!touched.email}
@@ -59,7 +86,7 @@ export const Register = () => {
               />
               <Input
                 variant='bordered'
-                label='Password'
+                label='رمز عیور'
                 type='password'
                 value={values.password}
                 isInvalid={!!errors.password && !!touched.password}
@@ -68,7 +95,7 @@ export const Register = () => {
               />
               <Input
                 variant='bordered'
-                label='Confirm password'
+                label='تکرار رمز عیور'
                 type='password'
                 value={values.confirmPassword}
                 isInvalid={
@@ -83,16 +110,16 @@ export const Register = () => {
               onPress={() => handleSubmit()}
               variant='flat'
               color='primary'>
-              Register
+              ثبت نام
             </Button>
           </>
         )}
       </Formik>
 
       <div className='font-light text-slate-400 mt-4 text-sm'>
-        Already have an account ?{" "}
+        اکانت ثیت شده دارید ؟{" "}
         <Link href='/login' className='font-bold'>
-          Login here
+        ورود
         </Link>
       </div>
     </>
