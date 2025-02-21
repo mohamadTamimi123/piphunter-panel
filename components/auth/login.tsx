@@ -18,7 +18,7 @@ export const Login = () => {
     email: "admin@acme.com",
     password: "admin",
   };
-  const [showLoader, setShowLoader] = useState();
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleLogin = useCallback(
     async (values: LoginFormType) => {
@@ -103,9 +103,9 @@ export const Login = () => {
       </Formik>
 
       <div className='font-light text-slate-400 mt-4 text-sm'>
-        Don&apos;t have an account ?{" "}
+        اکانت ندارید ؟{" "}
         <Link href='/register' className='font-bold'>
-          Register here
+          ثبت نام
         </Link>
       </div>
     </>

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export const createAuthCookie = async (token) => {
+export const createAuthCookie = async (token : string) => {
   cookies().set("userAuth", token, { secure: true });
 };
 

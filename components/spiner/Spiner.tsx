@@ -13,6 +13,7 @@ export default function Loader() {
   let [loading, setLoading] = useState(true);
   let [color, setColor] = useState("#ffffff");
 
+
   return (
     <div className={style.sweet_loading}>
 
@@ -21,6 +22,7 @@ export default function Loader() {
           color={color}
           loading={loading}
           cssOverride={override}
+            // @ts-ignore
           size={150}
           aria-label="Loading Spinner"
           data-testid="loader"
