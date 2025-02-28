@@ -53,6 +53,7 @@ export default function MainChatComponents() {
 
 
 
+
     return <div className={"flex flex-col w-full"}>
         <div className={"h-16 border-b border-divider"}>header</div>
         <div className={`flex flex-col gap-6 ${style.main_pos} flex-grow mt-6 px-6`}>
@@ -60,7 +61,7 @@ export default function MainChatComponents() {
             {
                 pending ? <Spinner /> :
 
-
+                    // @ts-ignore
                     msg.map((item) => {
                         return <div className={""}>
 
